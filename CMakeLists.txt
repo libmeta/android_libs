@@ -19,6 +19,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options("/w")
 endif()
 
-
 set(META_LIBS_NAME ${PROJECT_NAME})
 add_subdirectory(ffmpeg)
+install(TARGETS ${META_LIBS_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
