@@ -3,12 +3,12 @@ cmake_minimum_required(VERSION 3.14)
 project(ffmpeg)
 
 if(ANDROID)    
-    add_library(${PROJECT_NAME} INTERFACE)
+    add_library(${META_LIBS_NAME} INTERFACE)
     set(ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android_arm64-v8a)
-    target_include_directories(${PROJECT_NAME} INTERFACE
+    target_include_directories(${META_LIBS_NAME} INTERFACE
         ${ROOT_DIR}/include)
     target_link_libraries(
-        ${PROJECT_NAME} INTERFACE
+        ${META_LIBS_NAME} INTERFACE
         ${ROOT_DIR}/lib/libsrt.so
         ${ROOT_DIR}/lib/libssl.so
         ${ROOT_DIR}/lib/libcrypto.so
