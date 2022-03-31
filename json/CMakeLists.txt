@@ -19,6 +19,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(json)
 set(TAG 3.10.5)
-set( META_INCLUDES ${META_INCLUDES}  ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann-${TAG}  CACHE INTERNAL "includes list")
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/nlohmann-${TAG})
+set( META_INCLUDES ${META_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann-${TAG}  CACHE INTERNAL "includes list")
 
 

@@ -18,4 +18,5 @@
 cmake_minimum_required(VERSION 3.14)
 project(json)
 set(TAG 1.9.2)
-set(META_INCLUDES ${META_INCLUDES}  ${CMAKE_CURRENT_SOURCE_DIR}/spdlog-${TAG}/include  CACHE INTERNAL "includes list")
+set(META_INCLUDES ${META_INCLUDES}  ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/spdlog-${TAG}/include  CACHE INTERNAL "includes list")
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/spdlog-${TAG}/include)
