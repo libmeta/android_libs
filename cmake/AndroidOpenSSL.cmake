@@ -1,0 +1,10 @@
+project(AndroidOpenSSL)
+
+if (ANDROID)
+    if(DEFINED ANDROID_SDK_ROOT)
+        set(ANDROID_SDK ${ANDROID_SDK_ROOT})
+    else(ANDROID_SDK_ROOT)
+        set(ANDROID_SDK /opt/android-sdk)
+    endif(ANDROID_SDK_ROOT)
+    include(${ANDROID_SDK}/android_openssl/CMakeLists.txt)
+endif()

@@ -1,7 +1,3 @@
-//
-// Created by x on 2021/8/19.
-//
-
 #pragma once
 
 #define JMI_ARG0() (), (), ()
