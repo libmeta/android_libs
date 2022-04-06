@@ -177,8 +177,8 @@ public:
     }
 }; // struct auto_defer
 
-#define __COMBINE__(A, B) A##B
-#define _COMBINE_(A, B) __COMBINE__(A, B)
-#define defer(expr) __attribute__((unused)) xlab::auto_defer _COMBINE_(_defer_var_, __LINE__)(expr)
+//#define __COMBINE__(A, B) A##B
+//#define _COMBINE_(A, B) __COMBINE__(A, B)
+//#define defer(expr) __attribute__((unused)) xlab::auto_defer _COMBINE_(_defer_var_, __LINE__)(expr)
 
 } // namespace xlab

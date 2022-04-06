@@ -9,6 +9,7 @@ set(META_LIBS           "" CACHE INTERNAL "libraries list")
 set(META_DIRECTORIES    "" CACHE INTERNAL "directories list")
 set(META_SOURCES        "" CACHE INTERNAL "sources list")
 
+add_subdirectory(marl)
 add_subdirectory(ffmpeg)
 add_subdirectory(jmi)
 add_subdirectory(json)
