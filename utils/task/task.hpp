@@ -64,20 +64,17 @@ public:
     }
 
     template <Plan PLAN = Plan::CountingAndTicking>
-    bool run(const std::function<void(void)> taskFunc = nullptr)
+    bool run(const std::function<void(void)>& taskFunc = nullptr)
     {
         if (isPause) {
             return false;
         }
 
         bool done = false;
-        switch (PLAN) {
-        case Plan::CountingAndTicking:
+        if (PLAN == Plan::CountingAndTicking) {
             done = (cnt.done() && tick.done());
-            break;
-        case Plan::CountingAndTicking:
+        } else if (PLAN == Plan::CountingOrTicking) {
             done = (cnt.done() || tick.done());
-            break;
         }
 
         if (done) {
@@ -92,13 +89,10 @@ public:
             tick.selfInc();
         }
 
-        switch (PLAN) {
-        case Plan::CountingAndTicking:
+        if (PLAN == Plan::CountingAndTicking) {
             done = (cnt.done() && tick.done());
-            break;
-        case Plan::CountingAndTicking:
+        } else if (PLAN == Plan::CountingOrTicking) {
             done = (cnt.done() || tick.done());
-            break;
         }
 
         if (!done) {
@@ -110,6 +104,11 @@ public:
         }
 
         return true;
+    }
+
+    bool run(const std::function<void(void)>& taskFunc = nullptr)
+    {
+        return run<>(taskFunc);
     }
 
     void reset()

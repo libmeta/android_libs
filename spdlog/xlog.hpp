@@ -195,3 +195,11 @@ static inline std::string getFileName(const char* path)
 #ifndef clogc
 #define clogc(fmt, ...) XLog::getInstance().log(spdlog::level::critical, fmt, ##__VA_ARGS__)
 #endif
+
+#ifndef dlog
+#define dlog(level, fmt, ...) XLog::getInstance().log(level, fmt, ##__VA_ARGS__)
+#endif
+
+#ifndef llog
+#define llog(fmt, ...) dlog(this->getLevel(), fmt, ##__VA_ARGS__)
+#endif

@@ -6,7 +6,9 @@ extern "C" {
 
 #include <functional>
 
-struct FFrame {
+#include "xlog_common.hpp"
+
+struct FFrame : public XLogLevelBase {
     using DoType = std::function<void(AVFrame*)>;
 
     explicit FFrame()

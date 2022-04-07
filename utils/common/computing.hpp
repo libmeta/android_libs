@@ -11,45 +11,35 @@ namespace xlab {
 struct Counting {
     using type = int64_t;
 
-    explicit Counting(type max)
-        : maxVal(max)
-    {
-    }
+    explicit Counting(type max) : maxVal(max) {}
 
     ~Counting() { reset(); }
 
-    void setMaxVal(type max)
-    {
+    void setMaxVal(type max) {
         maxVal = max;
     }
 
-    type getMaxVal() const
-    {
+    type getMaxVal() const {
         return maxVal;
     }
 
-    static type zero()
-    {
+    static type zero() {
         return 0;
     }
 
-    void selfInc()
-    {
+    void selfInc() {
         ++val;
     }
 
-    bool done() const
-    {
+    bool done() const {
         return val >= maxVal;
     }
 
-    void reset()
-    {
+    void reset() {
         val = zero();
     }
 
-    type getVal() const
-    {
+    type getVal() const {
         return val;
     }
 
@@ -61,51 +51,42 @@ private:
 struct Ticking {
     using type = Time::Interval;
 
-    explicit Ticking(type max)
-        : maxTimeInterval(max)
-    {
-    }
+    explicit Ticking(type max) : maxTimeInterval(max) {}
 
     ~Ticking() { reset(); };
 
-    void setMaxVal(type max)
-    {
+    void setMaxVal(type max) {
         maxTimeInterval = max;
     }
 
-    type getMaxVal() const
-    {
+    type getMaxVal() const {
         return maxTimeInterval;
     }
 
-    void selfInc()
-    {
+    void selfInc() {
         if (!startTime.has_value()) {
             startTime = Time::Point::Now();
         }
         currentTimeInterval = Time::Point::Now() - startTime.value();
     }
 
-    bool done() const
-    {
+    bool done() const {
         return currentTimeInterval >= maxTimeInterval;
     }
 
-    void reset()
-    {
+    void reset() {
         startTime = std::nullopt;
         currentTimeInterval = type::Zero();
     }
 
-    type getVal() const
-    {
+    type getVal() const {
         return currentTimeInterval;
     }
 
 private:
-    std::optional<Time::Point> startTime {};
-    type currentTimeInterval {};
-    type maxTimeInterval {};
+    std::optional<Time::Point> startTime{};
+    type currentTimeInterval{};
+    type maxTimeInterval{};
 };
 
 }

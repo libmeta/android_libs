@@ -13,9 +13,9 @@ extern "C" {
 
 #include "fferr.hpp"
 #include "ffinterrup_cb.hpp"
-#include "xlog.hpp"
+#include "xlog_common.hpp"
 
-class FFMuxer {
+class FFMuxer : public XLogLevelBase {
 public:
     using HandleType = int;
 
@@ -54,7 +54,7 @@ public:
             return muxer;
         }
 
-        xloge("{}", FFErr::toString(muxer->getCode()));
+        dlog(muxer->getLevel(), FFErr::toString(muxer->getCode()));
         return nullptr;
     }
 
@@ -70,7 +70,7 @@ public:
     HandleType getHandle() const
     {
         int64_t srt_socket = 0;
-        av_opt_get_int(options, "srt_socket", 0, &srt_socket);
+        av_opt_get_int(options, "handle", 0, &srt_socket);
         return (HandleType)(srt_socket);
     }
 
@@ -105,6 +105,8 @@ private:
             || outUrl.find("udp://") != std::string::npos
             || outUrl.find("rtsp://") != std::string::npos) {
             format_name = "mpegts";
+        } else if (outUrl.find("rtp://") != std::string::npos) {
+            format_name = "rtp_mpegts";
         } else {
             format_name = nullptr;
         }
