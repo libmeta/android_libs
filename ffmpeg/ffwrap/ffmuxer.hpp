@@ -8,10 +8,12 @@ extern "C" {
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 #include "libavutil/channel_layout.h"
+#include "libavutil/opt.h"
 }
 
 #include "fferr.hpp"
 #include "ffinterrup_cb.hpp"
+#include "xlog.hpp"
 
 class FFMuxer {
 public:
@@ -48,7 +50,12 @@ public:
     static std::shared_ptr<FFMuxer> Make(const std::string& outUrl, const VideoParams* vparams, const AudioParams* aparams)
     {
         auto muxer = std::shared_ptr<FFMuxer>(new FFMuxer());
-        return muxer->init(outUrl, vparams, aparams) ? muxer : nullptr;
+        if (muxer->init(outUrl, vparams, aparams)) {
+            return muxer;
+        }
+
+        xloge("{}", FFErr::toString(muxer->getCode()));
+        return nullptr;
     }
 
 private:
@@ -62,7 +69,9 @@ public:
 
     HandleType getHandle() const
     {
-        return handle;
+        int64_t srt_socket = 0;
+        av_opt_get_int(options, "srt_socket", 0, &srt_socket);
+        return (HandleType)(srt_socket);
     }
 
     bool write(AVPacket* packet)
@@ -100,9 +109,13 @@ private:
             format_name = nullptr;
         }
 
-        const auto ret = avformat_alloc_output_context2(&outFmtCtx, nullptr, format_name, outUrl.c_str());
-        if (outFmtCtx == nullptr || ret < 0) {
-            code = ret;
+        int result = avformat_alloc_output_context2(&outFmtCtx, nullptr, format_name, outUrl.c_str());
+        if (outFmtCtx == nullptr || result < 0) {
+            result = avformat_alloc_output_context2(&outFmtCtx, nullptr, format_name, outUrl.c_str());
+        }
+
+        if (outFmtCtx == nullptr || result < 0) {
+            code = result;
             return false;
         }
 
@@ -173,8 +186,8 @@ private:
             return false;
         }
 
-        codecCtx->pix_fmt = AV_PIX_FMT_YUV420P;
-        codecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
+        codecCtx->pix_fmt = AVPixelFormat::AV_PIX_FMT_YUV420P;
+        codecCtx->codec_type = AVMediaType::AVMEDIA_TYPE_VIDEO;
         codecCtx->codec_id = codec->id;
         codecCtx->bit_rate = params->bitrate;
         codecCtx->width = params->width;
@@ -224,7 +237,7 @@ private:
         }
 
         codecCtx->sample_fmt = AVSampleFormat::AV_SAMPLE_FMT_S16;
-        codecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
+        codecCtx->codec_type = AVMediaType::AVMEDIA_TYPE_AUDIO;
         codecCtx->codec_id = codec->id;
         codecCtx->bit_rate = params->bitrate;
         codecCtx->channels = params->channels;
@@ -256,7 +269,6 @@ private:
     }
 
 private:
-    HandleType handle;
     std::atomic<int> code = 0;
     FFInterruptCB InterruptCB;
     AVFormatContext* outFmtCtx = nullptr;
