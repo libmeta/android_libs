@@ -57,6 +57,13 @@ public:
         text()->log(lvl, fmt, std::forward<Args>(args)...);
     }
 
+    template <typename... Args>
+    void log(spdlog::level::level_enum clvl, spdlog::level::level_enum tlvl, fmt::format_string<Args...> fmt, Args&&... args)
+    {
+        console()->log(clvl, fmt, std::forward<Args>(args)...);
+        text()->log(tlvl, fmt, std::forward<Args>(args)...);
+    }
+
 private:
     XLog() = default;
 
@@ -196,10 +203,14 @@ static inline std::string getFileName(const char* path)
 #define clogc(fmt, ...) XLog::getInstance().log(spdlog::level::critical, fmt, ##__VA_ARGS__)
 #endif
 
-#ifndef dlog
-#define dlog(level, fmt, ...) XLog::getInstance().log(level, fmt, ##__VA_ARGS__)
+#ifndef llog
+#define llog(level, fmt, ...) XLog::getInstance().log(level, fmt, ##__VA_ARGS__)
 #endif
 
-#ifndef llog
-#define llog(fmt, ...) dlog(this->getLevel(), fmt, ##__VA_ARGS__)
+#ifndef lllog
+#define lllog(clevel, tlevel, fmt, ...) XLog::getInstance().log(clevel, tlevel, fmt, ##__VA_ARGS__)
+#endif
+
+#ifndef dlog
+#define dlog(fmt, ...) lllog(this->getConsoleLevel(), this->getTextLevel(), fmt, ##__VA_ARGS__)
 #endif

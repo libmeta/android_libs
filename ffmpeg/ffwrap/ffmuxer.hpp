@@ -54,12 +54,15 @@ public:
             return muxer;
         }
 
-        dlog(muxer->getLevel(), FFErr::toString(muxer->getCode()));
+        lllog(muxer->getConsoleLevel(), muxer->getTextLevel(), "{}", FFErr::toString(muxer->getCode()));
         return nullptr;
     }
 
 private:
-    explicit FFMuxer() { }
+    explicit FFMuxer()
+        : XLogLevelBase()
+    {
+    }
 
 public:
     ~FFMuxer()

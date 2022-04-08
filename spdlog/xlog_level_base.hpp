@@ -1,25 +1,46 @@
 #pragma once
+
 #include <atomic>
 
 #include "xlog.hpp"
 
 class XLogLevelBase {
 public:
-    static inline auto XLogLevelDefault = XLog::ELevel::off;
+    XLogLevelBase(XLog::ELevel console_level = XLog::ELevel::off, XLog::ELevel text_level = XLog::ELevel::off)
+        : consoleLevel(console_level)
+        , textLevel(text_level)
+    {
+    }
 
-public:
-    virtual ~XLogLevelBase() {};
+    virtual ~XLogLevelBase() { }
 
     virtual void setLevel(XLog::ELevel level)
     {
-        this->level = level;
+        setConsoleLevel(level);
+        setTextLevel(level);
     }
 
-    virtual XLog::ELevel getLevel() const
+    virtual void setConsoleLevel(XLog::ELevel level)
     {
-        return this->level;
+        this->consoleLevel = level;
+    }
+
+    virtual void setTextLevel(XLog::ELevel level)
+    {
+        this->textLevel = level;
+    }
+
+    virtual XLog::ELevel getConsoleLevel() const
+    {
+        return this->consoleLevel;
+    }
+
+    virtual XLog::ELevel getTextLevel() const
+    {
+        return this->textLevel;
     }
 
 private:
-    std::atomic<XLog::ELevel> level = XLogLevelDefault;
+    std::atomic<XLog::ELevel> consoleLevel;
+    std::atomic<XLog::ELevel> textLevel;
 };

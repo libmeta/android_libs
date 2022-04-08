@@ -12,6 +12,7 @@ struct FFrame : public XLogLevelBase {
     using DoType = std::function<void(AVFrame*)>;
 
     explicit FFrame()
+        : XLogLevelBase()
     {
         handle_ = av_frame_alloc();
     }
