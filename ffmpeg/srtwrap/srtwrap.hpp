@@ -80,6 +80,26 @@ public:
         }
     }
 
+    SRT_SOCKSTATUS getSockstate() const
+    {
+        return srt_getsockstate(sock);
+    }
+
+    bool getSndBuffer(size_t* bytes, size_t* blocks)
+    {
+        const int st = srt_getsndbuffer(sock, blocks, bytes);
+        if (st == SRT_ERROR) {
+            return false;
+        }
+
+        return true;
+    }
+
+    const std::string& getLastError() const
+    {
+        return std::string(srt_getlasterror_str());
+    }
+
 private:
     void updateRTT(int rtt)
     {
@@ -134,7 +154,7 @@ private:
         return STATE_KEEP;
     }
 
-private:    
+private:
     static constexpr auto VIDEO_UPDATE_INTERVAL = 500ms;
 
     static constexpr auto SRT_CHECK_INTERVAL = 300ms;
