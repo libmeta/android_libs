@@ -1,7 +1,8 @@
+cmake_minimum_required(VERSION 3.14)
+
 if(ANDROID)
     # 添加第三方依赖包
     include(FetchContent)
-    cmake_minimum_required(VERSION 3.14)
 
     set(DEP_NAME  jmi)
     set(${DEP_NAME}_GIT_TAG  500e8e76acda1e880340a441a4107a430ca0413b)  # 指定版本

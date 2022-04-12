@@ -26,6 +26,17 @@ private:
     }
 
 public:
+    static std::shared_ptr<FFRemuxer> Make(const std::string& inUrl, const std::string& outUrl)
+    {
+        auto muxer = std::shared_ptr<FFRemuxer>(new FFRemuxer());
+        if (muxer->init(inUrl, outUrl)) {
+            return muxer;
+        }
+
+        lllog(muxer->getConsoleLevel(), muxer->getTextLevel(), "{}", FFErr::toString(muxer->getCode()));
+        return nullptr;
+    }
+
     ~FFRemuxer()
     {
         deInit();
@@ -38,15 +49,43 @@ public:
         return (HandleType)(srt_socket);
     }
 
-    bool init(){
-
+    bool write(AVPacket* packet)
+    {
+        av_packet_rescale_ts(packet, AV_TIME_BASE_Q, outFmtCtx->streams[packet->stream_index]->time_base);
+        const int write_result = av_write_frame(outFmtCtx, packet);
+        code = write_result;
+        return write_result < 0;
     }
 
+    int getCode() const
+    {
+        return code;
+    }
 
-    void deInit(){
+    bool isExit() const
+    {
+        return InterruptCB.IsExit();
+    }
 
+    void requestExit()
+    {
+        InterruptCB.Exit();
     }
 
 private:
+    bool init(const std::string& inUrl, const std::string& outUrl)
+    {
+        return true;
+    }
+
+    void deInit()
+    {
+    }
+
+private:
+    std::atomic<int> code = 0;
+    FFInterruptCB InterruptCB;
     AVDictionary* options = nullptr;
+    AVFormatContext* inFmtCtx = nullptr;
+    AVFormatContext* outFmtCtx = nullptr;
 };

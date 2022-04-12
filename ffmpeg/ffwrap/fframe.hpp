@@ -2,6 +2,7 @@
 
 extern "C" {
 #include "libavcodec/avcodec.h"
+#include "libavutil/avutil.h"
 }
 
 #include <functional>
@@ -30,6 +31,20 @@ struct FFrame : public XLogLevelBase {
     void do(const DoType& func)
     {
         func(handle_);
+    }
+
+    void log()
+    {
+        dlog("width:{}, height:{},key_frame:{},pict_type:{},format:{},pts:{},pkt_dts:{},nb_samples:{},sample_rate:{}",
+            handle_->width,
+            handle_->height,
+            handle_->key_frame,
+            handle_->pict_type,
+            handle_->format,
+            handle_->pts,
+            handle_->pkt_dts,
+            handle_->nb_samples,
+            handle_->sample_rate);
     }
 
 private:

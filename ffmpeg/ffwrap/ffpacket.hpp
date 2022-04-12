@@ -32,7 +32,7 @@ struct FFPacket : public XLogLevelBase {
         func(handle_)
     }
 
-    void logPacket(const AVFormatContext* fmt_ctx)
+    void log(const AVFormatContext* fmt_ctx)
     {
         const auto pkt = handle_;
         AVRational* time_base = &fmt_ctx->streams[pkt->stream_index]->time_base;
