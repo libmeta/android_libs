@@ -50,7 +50,7 @@ public:
         return (HandleType)(srt_socket);
     }
 
-    bool read(AVPacket* packet,const AVRational *timebase = nullptr)
+    bool read(AVPacket* packet, const AVRational* timebase = nullptr)
     {
         const int read_result = av_read_frame(inFmtCtx, packet);
         FF_SET_CODE_S(read_result, "av_read_frame");
@@ -65,16 +65,16 @@ public:
         }
 
         packet->stream_index = streamMapping[packet->stream_index];
-        if(timebase != nullptr){
+        if (timebase != nullptr) {
             av_packet_rescale_ts(packet, inFmtCtx->streams[packet->stream_index]->time_base, *timebase);
         }
 
         return read_result < 0;
     }
 
-    bool write(AVPacket* packet,const AVRational *timebase = nullptr)
+    bool write(AVPacket* packet, const AVRational* timebase = nullptr)
     {
-        if(timebase != nullptr){
+        if (timebase != nullptr) {
             av_packet_rescale_ts(packet, *timebase, outFmtCtx->streams[packet->stream_index]->time_base);
         }
 
@@ -219,7 +219,7 @@ private:
             oStream->codecpar->codec_tag = 0;
         }
 
-        // av_dump_format(oFmtCtx, 0, outUrl.c_str(), 1);
+        av_dump_format(outFmtCtx, 0, outUrl.c_str(), 1);
         if (!(outFmtCtx->flags & AVFMT_NOFILE)) {
             ioOpenResult = avio_open2(&outFmtCtx->pb, outUrl.c_str(), AVIO_FLAG_WRITE, &outFmtCtx->interrupt_callback, &options);
             if (ioOpenResult < 0) {

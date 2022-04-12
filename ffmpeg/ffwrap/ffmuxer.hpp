@@ -140,6 +140,7 @@ private:
             }
         }
 
+        av_dump_format(outFmtCtx, 0, outUrl.c_str(), 1);
         if (!(outFmtCtx->flags & AVFMT_NOFILE)) {
             ioOpenResult = avio_open2(&outFmtCtx->pb, outUrl.c_str(), AVIO_FLAG_WRITE, &outFmtCtx->interrupt_callback, &options);
             if (ioOpenResult < 0) {

@@ -29,7 +29,7 @@ struct FFrame : public XLogLevelBase {
         av_frame_free(&handle_);
     }
 
-    bool isNull()
+    bool isNull() const
     {
         return handle_ == nullptr || handle_->data[0] == nullptr || handle_->linesize[0] == 0;
     }

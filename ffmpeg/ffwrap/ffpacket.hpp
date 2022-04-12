@@ -29,9 +29,14 @@ struct FFPacket : public XLogLevelBase {
         av_packet_free(&handle_);
     }
 
-    bool isNull()
+    bool isNull() const
     {
         return handle_ == nullptr || handle_->data == nullptr || handle_->side_data_elems == 0;
+    }
+
+    bool isKey() const
+    {
+        return (handle_->flags | AV_PKT_FLAG_KEY) == AV_PKT_FLAG_KEY;
     }
 
     void do(const DoType& func)
