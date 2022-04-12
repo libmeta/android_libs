@@ -13,6 +13,7 @@ extern "C" {
 
 #include "fferr.hpp"
 #include "ffinterrup_cb.hpp"
+#include "ffutil.hpp"
 #include "xlog_common.hpp"
 
 class FFMuxer : public XLogLevelBase {
@@ -81,23 +82,23 @@ public:
     {
         av_packet_rescale_ts(packet, AV_TIME_BASE_Q, outFmtCtx->streams[packet->stream_index]->time_base);
         const int write_result = av_write_frame(outFmtCtx, packet);
-        code = write_result;
+        FF_SET_CODE(write_result);
         return write_result < 0;
     }
 
     int getCode() const
     {
-        return code;
+        return FF_GET_CODE();
     }
 
     bool isExit() const
     {
-        return InterruptCB.IsExit();
+        return interruptCB.IsExit();
     }
 
     void requestExit()
     {
-        InterruptCB.Exit();
+        interruptCB.Exit();
     }
 
 private:
@@ -120,11 +121,11 @@ private:
         }
 
         if (outFmtCtx == nullptr || result < 0) {
-            code = result;
+            FF_SET_CODE_S(result, "avformat_alloc_output_context2");
             return false;
         }
 
-        outFmtCtx->interrupt_callback = InterruptCB.GetAVIOInterruptCB();
+        outFmtCtx->interrupt_callback = interruptCB.GetAVIOInterruptCB();
         outFmtCtx->max_interleave_delta = 1000;
 
         if (vparams != nullptr) {
@@ -142,14 +143,14 @@ private:
         if (!(outFmtCtx->flags & AVFMT_NOFILE)) {
             ioOpenResult = avio_open2(&outFmtCtx->pb, outUrl.c_str(), AVIO_FLAG_WRITE, &outFmtCtx->interrupt_callback, &options);
             if (ioOpenResult < 0) {
-                code = ioOpenResult;
+                FF_SET_CODE_S(ioOpenResult, "avio_open2");
                 return false;
             }
         }
 
         ioWriteHeadResult = avformat_write_header(outFmtCtx, nullptr);
         if (ioWriteHeadResult < 0) {
-            code = ioWriteHeadResult;
+            FF_SET_CODE_S(ioWriteHeadResult, "avformat_write_header");
             return false;
         }
 
@@ -181,13 +182,13 @@ private:
     {
         const auto codec = avcodec_find_encoder(params->id);
         if (codec == nullptr) {
-            code = AVERROR_ENCODER_NOT_FOUND;
+            FF_SET_CODE_S(AVERROR_ENCODER_NOT_FOUND, "avcodec_find_encoder");
             return false;
         }
 
         auto codecCtx = avcodec_alloc_context3(codec);
         if (codecCtx == nullptr) {
-            code = AVERROR_ENCODER_NOT_FOUND;
+            FF_SET_CODE_S(AVERROR_ENCODER_NOT_FOUND, "avcodec_alloc_context3");
             return false;
         }
 
@@ -213,7 +214,7 @@ private:
 
         auto stream = avformat_new_stream(outFmtCtx, nullptr);
         if (stream == nullptr) {
-            code = AVERROR_STREAM_NOT_FOUND;
+            FF_SET_CODE_S(AVERROR_STREAM_NOT_FOUND, "avformat_new_stream");
             return false;
         }
 
@@ -231,13 +232,13 @@ private:
     {
         const auto codec = avcodec_find_encoder(params->id);
         if (codec == nullptr) {
-            code = AVERROR_ENCODER_NOT_FOUND;
+            FF_SET_CODE_S(AVERROR_ENCODER_NOT_FOUND, "avcodec_find_encoder");
             return false;
         }
 
         auto codecCtx = avcodec_alloc_context3(codec);
         if (codecCtx == nullptr) {
-            code = AVERROR_ENCODER_NOT_FOUND;
+            FF_SET_CODE_S(AVERROR_ENCODER_NOT_FOUND, "avcodec_alloc_context3");
             return false;
         }
 
@@ -261,7 +262,7 @@ private:
 
         auto stream = avformat_new_stream(outFmtCtx, nullptr);
         if (stream == nullptr) {
-            code = AVERROR_STREAM_NOT_FOUND;
+            FF_SET_CODE_S(AVERROR_STREAM_NOT_FOUND, "avformat_new_stream");
             return false;
         }
 
@@ -274,8 +275,8 @@ private:
     }
 
 private:
-    std::atomic<int> code = 0;
-    FFInterruptCB InterruptCB;
+    std::tuple<int, std::string, int> code = { 0, "", -1 };
+    FFInterruptCB interruptCB;
     AVFormatContext* outFmtCtx = nullptr;
     AVCodecContext* videoCodecCtx = nullptr;
     AVCodecContext* audioCodecCtx = nullptr;

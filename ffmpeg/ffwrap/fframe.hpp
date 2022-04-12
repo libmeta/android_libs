@@ -18,6 +18,12 @@ struct FFrame : public XLogLevelBase {
         handle_ = av_frame_alloc();
     }
 
+    explicit FFrame(const AVFrame* frame)
+        : handle_(frame)
+        , XLogLevelBase()
+    {
+    }
+
     ~FFrame()
     {
         av_frame_free(&handle_);

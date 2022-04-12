@@ -12,9 +12,16 @@ extern "C" {
 struct FFPacket : public XLogLevelBase {
     using DoType = std::function<void(AVPacket*)>;
 
-    explicit FFPacket():XLogLevelBase()
+    explicit FFPacket()
+        : XLogLevelBase()
     {
         handle_ = av_packet_alloc();
+    }
+
+    explicit FFPacket(const AVPacket* pkt)
+        : handle_(pkt)
+        , XLogLevelBase()
+    {
     }
 
     ~FFPacket()
