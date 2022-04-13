@@ -15,4 +15,5 @@ FetchContent_Declare(
 
 #    include_directories(${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src)
 FetchContent_MakeAvailable(${DEP_NAME})
-set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src/include     CACHE INTERNAL "includes list")
+set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_CURRENT_SOURCE_DIR}                             CACHE INTERNAL "includes list")
+set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src/include       CACHE INTERNAL "includes list")

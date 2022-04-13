@@ -7,7 +7,7 @@
 #include <shlobj.h>
 #pragma comment(lib, "shell32.lib")
 
-static inline std::string wstring2utf8string(const std::wstring& wstr) {
+static inline const std::string &wstring2utf8string(const std::wstring& wstr) {
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
     return conv.to_bytes(wstr);
     //return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(wstr);//c++17
@@ -15,7 +15,7 @@ static inline std::string wstring2utf8string(const std::wstring& wstr) {
 
 #endif
 
-static inline std::string getDefaultXLogPath(){
+static inline const std::string &getDefaultXLogPath(){
 #ifdef ANDROID
     return  "/sdcard/x/log/sdk/sdk.log";
 #endif

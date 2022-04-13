@@ -16,8 +16,11 @@ if(ANDROID)
 
 #    include_directories(${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src)
     FetchContent_MakeAvailable(${DEP_NAME})
+
     set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src       CACHE INTERNAL "includes list")
     set( META_DIRECTORIES       ${META_DIRECTORIES}     ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-build     CACHE INTERNAL "directories list")
     set( META_LIBS              ${META_LIBS}            ${DEP_NAME}                                     CACHE INTERNAL "libs list")
 
 endif(ANDROID)
+
+set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_CURRENT_SOURCE_DIR}                         CACHE INTERNAL "includes list")
