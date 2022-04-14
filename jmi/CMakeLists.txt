@@ -1,26 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
 
-if(ANDROID)
-    # 添加第三方依赖包
-    include(FetchContent)
+project(jmi)
 
-    set(DEP_NAME  jmi)
-    set(${DEP_NAME}_GIT_TAG  500e8e76acda1e880340a441a4107a430ca0413b)  # 指定版本
-    set(${DEP_NAME}_GIT_URL  https://github.com/wang-bin/JMI.git)  # 指定git仓库地址
+include(GitFetchContent)
+include(MetaUtil)
 
-    FetchContent_Declare(
-        ${DEP_NAME}
-        GIT_REPOSITORY    ${${DEP_NAME}_GIT_URL}
-        GIT_TAG           ${${DEP_NAME}_GIT_TAG}
-        )
-
-#    include_directories(${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src)
-    FetchContent_MakeAvailable(${DEP_NAME})
-
-    set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src       CACHE INTERNAL "includes list")
-    set( META_DIRECTORIES       ${META_DIRECTORIES}     ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-build     CACHE INTERNAL "directories list")
-    set( META_LIBS              ${META_LIBS}            ${DEP_NAME}                                     CACHE INTERNAL "libs list")
-
-endif(ANDROID)
-
-set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_CURRENT_SOURCE_DIR}                         CACHE INTERNAL "includes list")
+git_fetch(${PROJECT_NAME} 500e8e76acda1e880340a441a4107a430ca0413b https://github.com/wang-bin/JMI.git)
+add_meta_packet(${PROJECT_NAME})
+add_meta_include(${CMAKE_CURRENT_SOURCE_DIR})

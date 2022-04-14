@@ -9,8 +9,11 @@ set(META_LIBS           "" CACHE INTERNAL "libraries list")
 set(META_DIRECTORIES    "" CACHE INTERNAL "directories list")
 set(META_SOURCES        "" CACHE INTERNAL "sources list")
 
+if(ANDROID)
+    add_subdirectory(jmi)
+endif(ANDROID)
+
 add_subdirectory(webrtc)
-add_subdirectory(jmi)
 add_subdirectory(sigslot)
 add_subdirectory(marl)
 add_subdirectory(ffmpeg)

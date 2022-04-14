@@ -1,34 +1,26 @@
 cmake_minimum_required(VERSION 3.14)
-include(FetchContent)
+project(webrtc)
 
-set(DEP_NAME  webrtc)
-set(${DEP_NAME}_URL     https://github.com/shiguredo-webrtc-build/webrtc-build/releases/download)
-set(${DEP_NAME}_TAG     m100.4896.1.2)
+include(DownloadFetchContent)
+include(MetaUtil)
 
 if(ANDROID)
-    set(${DEP_NAME}_PACKAGE ${${DEP_NAME}_TAG}/webrtc.android.tar.gz)
+    set(${PROJECT_NAME}_PACKAGE /webrtc.android.tar.gz)
 endif(ANDROID)
 
 if(APPLE)
-    set(${DEP_NAME}_PACKAGE  ${${DEP_NAME}_TAG}/webrtc.ios.tar.gz)
+    set(${PROJECT_NAME}_PACKAGE  /webrtc.ios.tar.gz)
 endif(APPLE)
 
 if(WIN32)
-    set(${DEP_NAME}_PACKAGE  ${${DEP_NAME}_TAG}/webrtc.windows_x86_64.zip)
+    set(${PROJECT_NAME}_PACKAGE  /webrtc.windows_x86_64.zip)
 endif()
 
-FetchContent_Declare(
-    ${DEP_NAME}
-    URL         ${${DEP_NAME}_URL}/${${DEP_NAME}_PACKAGE}
-    #    URL_HASH MD5=5588a7b18261c20068beabfb4f530b87
-)
-
-FetchContent_MakeAvailable(${DEP_NAME})
-set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_CURRENT_SOURCE_DIR}                                     CACHE INTERNAL "includes list")
-set( META_INCLUDES          ${META_INCLUDES}        ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src/include               CACHE INTERNAL "includes list")
-
+download_fetch(${PROJECT_NAME} m100.4896.1.2 https://github.com/shiguredo-webrtc-build/webrtc-build/releases/download ${${PROJECT_NAME}_PACKAGE})
+add_meta_include(${${PROJECT_NAME}_INCLUDE}/include)
+add_meta_lib(${PROJECT_NAME})
 if(ANDROID)
-set( META_DIRECTORIES       ${META_DIRECTORIES}     ${CMAKE_BINARY_DIR}/_deps/${DEP_NAME}-src/lib/${CMAKE_ANDROID_ARCH_ABI}   CACHE INTERNAL "directories list")
+    add_meta_directory(${${PROJECT_NAME}_INCLUDE}/lib/${CMAKE_ANDROID_ARCH_ABI})
 endif(ANDROID)
 
-set( META_LIBS              ${META_LIBS}            ${DEP_NAME}                                                     CACHE INTERNAL "libs list")
+add_meta_include(${CMAKE_CURRENT_SOURCE_DIR})
