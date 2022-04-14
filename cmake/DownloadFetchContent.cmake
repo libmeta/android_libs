@@ -21,4 +21,4 @@ set(${DEP_NAME}_INCLUDE         ${${DEP_NAME}_SRC})
 set(${DEP_NAME}_DIRECTORY       ${${DEP_NAME}_BUILD})
 set(${DEP_NAME}_LIB             ${DEP_NAME})
 
-endmacro(downloadfetch)
+endmacro(download_fetch)

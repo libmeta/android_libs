@@ -10,7 +10,7 @@ if(ANDROID)
     set(TAG 5.0)
     set( ROOT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/v${TAG}_android_arm64-v8a)
     set( META_INCLUDES ${META_INCLUDES}         ${ROOT_DIR}/include             CACHE INTERNAL "includes list")
-#    set( META_DIRECTORIES ${META_DIRECTORIES}   ${ROOT_DIR}/lib                 CACHE INTERNAL "directories list")
+    set( META_DIRECTORIES ${META_DIRECTORIES}   ${ROOT_DIR}/lib                 CACHE INTERNAL "directories list")
     set( META_DIRECTORIES ${META_DIRECTORIES}   ${CMAKE_CURRENT_BINARY_DIR}     CACHE INTERNAL "directories list")
     foreach(LIB
             libz.so

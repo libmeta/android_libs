@@ -1,0 +1,17 @@
+macro(add_option_on_definition DEFINITION_NAME)
+    message("[${DEFINITION_NAME}] ON")
+    option(${DEFINITION_NAME} "${DEFINITION_NAME}" ON)
+    add_compile_definitions(${DEFINITION_NAME})
+endmacro()
+
+macro(remove_option_off_definition DEFINITION_NAME)
+    message("[${DEFINITION_NAME}] OFF")
+    option(${DEFINITION_NAME} "${DEFINITION_NAME}" OFF)
+    remove_definitions(${DEFINITION_NAME})
+endmacro(remove_option_off_definition)
+
+macro(target_option_on_definition TARGET_NAME DEFINITION_NAME)
+    message("[${DEFINITION_NAME}] ON")
+    option(${DEFINITION_NAME} "${DEFINITION_NAME}" ON)
+    target_compile_definitions(${TARGET_NAME} PRIVATE ${DEFINITION_NAME})
+endmacro(target_option_on_definition)

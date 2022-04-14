@@ -3,23 +3,36 @@ cmake_minimum_required(VERSION 3.14)
 project(meta_libs)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/meta_libs/cmake")
+include(OptionDefinition)
 
 set(META_INCLUDES       "" CACHE INTERNAL "includes list")
 set(META_LIBS           "" CACHE INTERNAL "libraries list")
 set(META_DIRECTORIES    "" CACHE INTERNAL "directories list")
 set(META_SOURCES        "" CACHE INTERNAL "sources list")
 
+add_subdirectory(spdlog)
+add_subdirectory(utils)
+add_subdirectory(json)
+
 if(ANDROID)
     add_subdirectory(jmi)
 endif(ANDROID)
 
-add_subdirectory(webrtc)
-add_subdirectory(sigslot)
-add_subdirectory(marl)
-add_subdirectory(ffmpeg)
-add_subdirectory(json)
-add_subdirectory(spdlog)
-add_subdirectory(utils)
+if(HAVE_SIGSLOT)
+    add_subdirectory(sigslot)
+endif(HAVE_SIGSLOT)
+
+if(HAVE_MARL)
+    add_subdirectory(marl)
+endif(HAVE_MARL)
+
+if(HAVE_FFMPEG)
+    add_subdirectory(ffmpeg)
+endif(HAVE_FFMPEG)
+
+if(HAVE_WEBRTC)
+    add_subdirectory(webrtc)
+endif(HAVE_WEBRTC)
 
 file(GLOB META_SO    ${CMAKE_CURRENT_BINARY_DIR}/*/*.so)
 file(COPY ${META_SO} DESTINATION ${CMAKE_CURRENT_BINARY_DIR} FOLLOW_SYMLINK_CHAIN)
