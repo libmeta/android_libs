@@ -14,3 +14,19 @@ function(include_directory_recursive directory)
         endforeach (sub_dir ${sub_dir_list})
     endif (IS_DIRECTORY ${directory})
 endfunction(include_directory_recursive directory)
+
+
+function(aux_include_directory directory include_paths)
+    if (IS_DIRECTORY ${directory})
+        set(${include_paths} ${${include_paths}} ${directory})
+        file(GLOB sub_dir_list RELATIVE ${directory} ${directory}/*)
+        foreach (sub_dir ${sub_dir_list})
+            if (IS_DIRECTORY ${directory}/${sub_dir})
+                aux_include_directory(${directory}/${sub_dir}  ${include_paths})
+            endif (IS_DIRECTORY ${directory}/${sub_dir})
+        endforeach (sub_dir ${sub_dir_list})
+    endif (IS_DIRECTORY ${directory})
+endfunction(aux_include_directory directory include_paths)
+
+
+

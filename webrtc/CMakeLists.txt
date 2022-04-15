@@ -22,8 +22,9 @@ add_meta_lib(${PROJECT_NAME})
 if(ANDROID)
     add_meta_directory(${${PROJECT_NAME}_SRC}/lib/${CMAKE_ANDROID_ARCH_ABI})
     add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/abseil-cpp)
-    add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/boringssl/src/include)
+    #    add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/boringssl/src/include)
     add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/libyuv/include)
 endif(ANDROID)
 
 add_meta_include(${CMAKE_CURRENT_SOURCE_DIR})
+
