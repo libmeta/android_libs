@@ -3,12 +3,16 @@ macro(add_meta_include INCLUDE)
 endmacro(add_meta_include)
 
 macro(add_meta_directory DIRECTORY)
-    set( META_DIRECTORIES               ${META_DIRECTORIES}        ${DIRECTORY}             CACHE INTERNAL "directories list")
+    set( META_DIRECTORIES               ${META_DIRECTORIES}        ${DIRECTORY}                 CACHE INTERNAL "directories list")
 endmacro(add_meta_directory)
 
 macro(add_meta_lib LIB)
     set( META_LIBS                      ${META_LIBS}                ${LIB}                    CACHE INTERNAL "libs list")
 endmacro(add_meta_lib)
+
+macro(add_meta_source SOURCE)
+    set( META_SOURCES                   ${META_SOURCES}             ${SOURCE}                 CACHE INTERNAL "sources list")
+endmacro(add_meta_source)
 
 macro(add_meta_root INCLUDE DIRECTORY LIB)
     add_meta_include(${INCLUDE})
