@@ -16,17 +16,17 @@ function(include_directory_recursive directory)
 endfunction(include_directory_recursive directory)
 
 
-function(aux_include_directory directory include_paths)
+macro(aux_include_directory directory directory_val)
     if (IS_DIRECTORY ${directory})
-        set(${include_paths} ${${include_paths}} ${directory})
+        list(APPEND ${directory_val} ${directory})
         file(GLOB sub_dir_list RELATIVE ${directory} ${directory}/*)
         foreach (sub_dir ${sub_dir_list})
             if (IS_DIRECTORY ${directory}/${sub_dir})
-                aux_include_directory(${directory}/${sub_dir}  ${include_paths})
+                aux_include_directory(${directory}/${sub_dir}  ${directory_val})
             endif (IS_DIRECTORY ${directory}/${sub_dir})
         endforeach (sub_dir ${sub_dir_list})
     endif (IS_DIRECTORY ${directory})
-endfunction(aux_include_directory directory include_paths)
+endmacro(aux_include_directory directory directory_val)
 
 
 
