@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(meta_libs)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/meta_libs/cmake")
+include(InitSystemName)
 include(OptionDefinition)
 
 set(META_INCLUDES       "" CACHE INTERNAL "includes list")
