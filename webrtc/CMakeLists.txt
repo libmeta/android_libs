@@ -5,26 +5,21 @@ include(DownloadFetchContent)
 include(MetaUtil)
 
 if(ANDROID)
-    set(${PROJECT_NAME}_PACKAGE /webrtc.android.tar.gz)
+    set(DEP_NAME ${PROJECT_NAME}_android)
+    set(${DEP_NAME}_PACKAGE  /webrtc-android.zip)
 endif(ANDROID)
 
-if(APPLE)
-    set(${PROJECT_NAME}_PACKAGE  /webrtc.ios.tar.gz)
-endif(APPLE)
-
-if(WIN32)
-    set(${PROJECT_NAME}_PACKAGE  /webrtc.windows_x86_64.zip)
-endif()
-
-download_fetch(${PROJECT_NAME} m100.4896.1.2 https://github.com/shiguredo-webrtc-build/webrtc-build/releases/download ${${PROJECT_NAME}_PACKAGE})
-add_meta_include(${${PROJECT_NAME}_SRC}/include)
+download_fetch(${DEP_NAME} M96 https://github.com/Unity-Technologies/com.unity.webrtc/releases/download/ ${${DEP_NAME}_PACKAGE})
+add_meta_include(${${DEP_NAME}_SRC}/include)
 add_meta_lib(${PROJECT_NAME})
+
 if(ANDROID)
-    add_meta_directory(${${PROJECT_NAME}_SRC}/lib/${CMAKE_ANDROID_ARCH_ABI})
-    add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/abseil-cpp)
+    add_meta_directory(${${DEP_NAME}_SRC}/lib/${CMAKE_ANDROID_ARCH})
+    add_meta_include(${${DEP_NAME}_SRC}/include/third_party/abseil-cpp)
     #    add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/boringssl/src/include)
-    add_meta_include(${${PROJECT_NAME}_SRC}/include/third_party/libyuv/include)
+    add_meta_include(${${DEP_NAME}_SRC}/include/third_party/jsoncpp/source/include)
+    add_meta_include(${${DEP_NAME}_SRC}//include/third_party/jsoncpp/generated)
+    add_meta_include(${${DEP_NAME}_SRC}/include/third_party/libyuv/include)
 endif(ANDROID)
 
 add_meta_include(${CMAKE_CURRENT_SOURCE_DIR})
-

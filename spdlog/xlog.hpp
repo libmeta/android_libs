@@ -204,13 +204,13 @@ static inline std::string getFileName(const char* path)
 #endif
 
 #ifndef llog
-#define llog(level, fmt, ...) XLog::getInstance().log(level, fmt, ##__VA_ARGS__)
+#define llog(level, fmt, ...) XLog::getInstance().log(level,"[{}:{}] [{}] : " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__, ##__VA_ARGS__)
 #endif
 
 #ifndef lllog
-#define lllog(clevel, tlevel, fmt, ...) XLog::getInstance().log(clevel, tlevel, fmt, ##__VA_ARGS__)
+#define lllog(clevel, tlevel, fmt, ...) XLog::getInstance().log(clevel, tlevel, "[{}:{}] [{}] : " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__, ##__VA_ARGS__)
 #endif
 
 #ifndef dlog
-#define dlog(fmt, ...) lllog(this->getConsoleLevel(), this->getTextLevel(), fmt, ##__VA_ARGS__)
+#define dlog(fmt, ...) lllog(this->getConsoleLevel(), this->getTextLevel(), "[{}:{}] [{}] : " fmt, __FILE_NAME__, __LINE__, __PRETTY_FUNCTION__, ##__VA_ARGS__)
 #endif

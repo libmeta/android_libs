@@ -6,7 +6,7 @@
 
 class XLogLevelBase {
 public:
-    XLogLevelBase(XLog::ELevel console_level = XLog::ELevel::off, XLog::ELevel text_level = XLog::ELevel::off)
+    XLogLevelBase(XLog::ELevel console_level = XLog::ELevel::trace, XLog::ELevel text_level = XLog::ELevel::trace)
         : consoleLevel(console_level)
         , textLevel(text_level)
     {
